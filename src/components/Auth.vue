@@ -125,12 +125,13 @@
             </button>
           </form>
           <!-- Registration Form -->
-          <form v-show="isRegisterTab">
+          <vee-form v-show="isRegisterTab" :validation-schema="schema">
             <!-- Name -->
             <div class="mb-3">
               <label class="inline-block mb-2">Name</label>
-              <input
+              <vee-field
                 type="text"
+                name="name"
                 class="
                   block
                   w-full
@@ -145,12 +146,14 @@
                 "
                 placeholder="Enter Name"
               />
+              <vee-error-message class="text-red-600" name="name" />
             </div>
             <!-- Email -->
             <div class="mb-3">
               <label class="inline-block mb-2">Email</label>
-              <input
+              <vee-field
                 type="email"
+                name="email"
                 class="
                   block
                   w-full
@@ -165,6 +168,7 @@
                 "
                 placeholder="Enter Email"
               />
+              <vee-error-message class="text-red-600" name="email" />
             </div>
             <!-- Age -->
             <div class="mb-3">
@@ -268,7 +272,7 @@
             >
               Submit
             </button>
-          </form>
+          </vee-form>
         </div>
       </div>
     </div>
@@ -283,6 +287,15 @@ export default {
   data() {
     return {
       tab: 'login',
+      schema: {
+        name: 'required|min:3|max:100|alpha_spaces',
+        email: 'required|email',
+        age: '',
+        passowrd: '',
+        confirmPassword: '',
+        country: '',
+        tos: '',
+      },
     };
   },
   computed: {
