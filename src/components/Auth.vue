@@ -66,10 +66,14 @@
           </ul>
 
           <!-- Login Form -->
-          <login v-show="isLoginTab" />
+          <template v-if="isLoginTab">
+            <login />
+          </template>
 
           <!-- Registration Form -->
-          <register v-show="isRegisterTab" />
+          <template v-if="isRegisterTab">
+            <register />
+          </template>
         </div>
       </div>
     </div>

@@ -1,4 +1,7 @@
 <template>
+  <div class="text-white text-center font-bold p-5 mb-4" v-if="showAlert" :class="alertVariant">
+    {{ alertMsg }}
+  </div>
   <vee-form :validation-schema="schema" @submit="register" :initial-values="userData">
     <!-- Name -->
     <div class="mb-3">
@@ -174,6 +177,7 @@
         transition
         hover:bg-purple-700
       "
+      :disabled="inSubmission"
     >
       Submit
     </button>
@@ -197,11 +201,22 @@ export default {
       userData: {
         country: 'Germany',
       },
+      inSubmission: false,
+      showAlert: false,
+      alertVariant: 'bg-blue-500',
+      alertMsg: 'Please wait! Your account is being created.',
     };
   },
   methods: {
     register(values) {
+      this.showAlert = true;
+      this.inSubmission = true;
+      this.alertVariant = 'bg-blue-500';
+      this.alertMsg = 'Please wait! Your account is being created.';
       console.log(values);
+
+      this.alertVariant = 'bg-green-500';
+      this.alertMsg = 'Success! Your account has been created!';
     },
   },
 };
