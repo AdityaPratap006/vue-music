@@ -1,9 +1,13 @@
 <template>
-  <form>
+  <div class="text-white text-center font-bold p-5 mb-4" v-if="showAlert" :class="alertVariant">
+    {{ alertMsg }}
+  </div>
+  <vee-form :validation-schema="schema" @submit="login">
     <!-- Email -->
     <div class="mb-3">
       <label class="inline-block mb-2">Email</label>
-      <input
+      <vee-field
+        name="email"
         type="email"
         class="
           block
@@ -19,11 +23,13 @@
         "
         placeholder="Enter Email"
       />
+      <vee-error-message class="text-red-600" name="email" />
     </div>
     <!-- Password -->
     <div class="mb-3">
       <label class="inline-block mb-2">Password</label>
-      <input
+      <vee-field
+        name="password"
         type="password"
         class="
           block
@@ -39,6 +45,7 @@
         "
         placeholder="Password"
       />
+      <vee-error-message class="text-red-600" name="password" />
     </div>
     <button
       type="submit"
@@ -56,11 +63,35 @@
     >
       Submit
     </button>
-  </form>
+  </vee-form>
 </template>
 
 <script>
 export default {
   name: 'Login',
+  data() {
+    return {
+      schema: {
+        email: 'required|email',
+        password: 'required|min:3|max:100',
+      },
+      inSubmission: false,
+      showAlert: false,
+      alertVariant: 'bg-blue-500',
+      alertMsg: 'Please wait! Logging you in.',
+    };
+  },
+  methods: {
+    login(values) {
+      this.showAlert = true;
+      this.inSubmission = true;
+      this.alertVariant = 'bg-blue-500';
+      this.alertMsg = 'Please wait! Logging you in.';
+      console.log(values);
+
+      this.alertVariant = 'bg-green-500';
+      this.alertMsg = 'Success! You are logged in!';
+    },
+  },
 };
 </script>
