@@ -185,6 +185,8 @@
 </template>
 
 <script>
+import firebase from '@/includes/firebase';
+
 export default {
   name: 'Register',
   data() {
@@ -208,15 +210,28 @@ export default {
     };
   },
   methods: {
-    register(values) {
+    async register(values) {
       this.showAlert = true;
       this.inSubmission = true;
-      this.alertVariant = 'bg-blue-500';
-      this.alertMsg = 'Please wait! Your account is being created.';
+
       console.log(values);
 
-      this.alertVariant = 'bg-green-500';
-      this.alertMsg = 'Success! Your account has been created!';
+      let userCred = null;
+      try {
+        userCred = await firebase
+          .auth()
+          .createUserWithEmailAndPassword(values.email, values.password);
+
+        this.alertVariant = 'bg-green-500';
+        this.alertMsg = 'Success! Your account has been created!';
+      } catch (error) {
+        this.alertVariant = 'bg-red-500';
+        this.alertMsg = 'Failed! Could not create the account!';
+      } finally {
+        this.inSubmission = false;
+      }
+
+      console.log({ userCred });
     },
   },
 };
