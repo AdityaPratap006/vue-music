@@ -35,6 +35,14 @@ export default createStore({
 
       commit('toggleAuth');
     },
+
+    init_login: ({ commit }) => {
+      const user = firebaseAuth.currentUser;
+
+      if (user) {
+        commit('toggleAuth');
+      }
+    },
   },
   modules: {},
 });
