@@ -185,8 +185,6 @@
 </template>
 
 <script>
-import { firebaseAuth, usersCollection } from '@/includes/firebase';
-
 export default {
   name: 'Register',
   data() {
@@ -216,26 +214,8 @@ export default {
 
       console.log(values);
 
-      let userCred = null;
       try {
-        userCred = await firebaseAuth.createUserWithEmailAndPassword(values.email, values.password);
-      } catch (error) {
-        this.alertVariant = 'bg-red-500';
-        this.alertMsg = 'Failed! Could not create the account!';
-        this.inSubmission = false;
-
-        return;
-      }
-
-      console.log({ userCred });
-
-      try {
-        await usersCollection.add({
-          name: values.name,
-          email: values.email,
-          country: values.country,
-          age: values.age,
-        });
+        await this.$store.dispatch('register', values);
       } catch (error) {
         this.alertVariant = 'bg-red-500';
         this.alertMsg = 'Failed! Could not create the account!';
