@@ -11,22 +11,29 @@ export default createStore({
     toggleAuthModal: (state) => {
       state.authModalShow = !state.authModalShow;
     },
-    toggleAuthentication: (state) => {
+    toggleAuth: (state) => {
       state.userLoggedIn = !state.userLoggedIn;
     },
   },
   actions: {
     register: async ({ commit }, payload) => {
-      await firebaseAuth.createUserWithEmailAndPassword(payload.email, payload.password);
+      const userCred = await firebaseAuth.createUserWithEmailAndPassword(
+        payload.email,
+        payload.password
+      );
 
-      await usersCollection.add({
+      await usersCollection.doc(userCred.user.uid).set({
         name: payload.name,
         email: payload.email,
         country: payload.country,
         age: payload.age,
       });
 
-      commit('toggleAuthentication');
+      await userCred.user.updateProfile({
+        displayName: payload.name,
+      });
+
+      commit('toggleAuth');
     },
   },
   modules: {},
