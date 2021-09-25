@@ -1,5 +1,5 @@
 import { createStore } from 'vuex';
-import { firebaseAuth, usersCollection } from '@/includes/firebase';
+import { firebaseAuth, usersCollection } from '../includes/firebase';
 
 export default createStore({
   state: {
