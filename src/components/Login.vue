@@ -99,6 +99,7 @@ export default {
 
       this.alertVariant = 'bg-green-500';
       this.alertMsg = 'Success! You are logged in!';
+      window.location.reload();
     },
   },
 };

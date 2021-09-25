@@ -226,6 +226,7 @@ export default {
 
       this.alertVariant = 'bg-green-500';
       this.alertMsg = 'Success! Your account has been created!';
+      window.location.reload();
     },
   },
 };

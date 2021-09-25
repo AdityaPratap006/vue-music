@@ -49,6 +49,12 @@ export default createStore({
 
       commit('toggleAuth');
     },
+
+    signOut: async ({ commit }) => {
+      await firebaseAuth.signOut();
+
+      commit('toggleAuth');
+    },
   },
   modules: {},
 });
