@@ -82,12 +82,20 @@ export default {
     };
   },
   methods: {
-    login(values) {
+    async login(values) {
       this.showAlert = true;
       this.inSubmission = true;
-      this.alertVariant = 'bg-blue-500';
-      this.alertMsg = 'Please wait! Logging you in.';
+
       console.log(values);
+
+      try {
+        await this.$store.dispatch('login', values);
+      } catch (error) {
+        this.alertVariant = 'bg-red-500';
+        this.alertMsg = 'Failed! Could not log you in!';
+        this.inSubmission = false;
+        return;
+      }
 
       this.alertVariant = 'bg-green-500';
       this.alertMsg = 'Success! You are logged in!';

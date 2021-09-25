@@ -43,6 +43,12 @@ export default createStore({
         commit('toggleAuth');
       }
     },
+
+    login: async ({ commit }, payload) => {
+      await firebaseAuth.signInWithEmailAndPassword(payload.email, payload.password);
+
+      commit('toggleAuth');
+    },
   },
   modules: {},
 });
