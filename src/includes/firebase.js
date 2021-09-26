@@ -20,5 +20,6 @@ export const firebaseAuth = firebase.auth();
 export const firestore = firebase.firestore();
 
 export const usersCollection = firestore.collection('users');
+export const songsCollection = firestore.collection('songs');
 
 export const firebaseStorage = firebase.storage();
