@@ -15,6 +15,9 @@
       </button>
     </div>
     <div v-show="showForm">
+      <div class="text-white text-center font-bold p-4 mb-4" v-if="showAlert" :class="alertVariant">
+        {{ alertMsg }}
+      </div>
       <vee-form
         :validation-schema="schema"
         :initial-values="{ title: song.modifiedName, genre: song.genre }"
@@ -63,11 +66,18 @@
           <vee-error-message class="text-red-600 text-xs" name="genre" />
         </div>
         <div class="flex justify-start items-center gap-2 mt-6">
-          <button type="submit" class="py-1.5 px-3 rounded text-white bg-green-600">Submit</button>
+          <button
+            type="submit"
+            class="py-1.5 px-3 rounded text-white bg-green-600"
+            :disabled="inSubmission"
+          >
+            Submit
+          </button>
           <button
             type="button"
             class="py-1.5 px-3 rounded text-white bg-gray-600"
             @click.prevent="toggleForm"
+            :disabled="inSubmission"
           >
             Go Back
           </button>
@@ -78,11 +88,21 @@
 </template>
 
 <script>
+import { songsCollection } from '../includes/firebase';
+
 export default {
   name: 'CompositionItem',
   props: {
     song: {
       type: Object,
+      required: true,
+    },
+    updateSong: {
+      type: Function,
+      required: true,
+    },
+    index: {
+      type: Number,
       required: true,
     },
   },
@@ -93,14 +113,46 @@ export default {
         title: 'required',
         genre: 'alpha_spaces',
       },
+      inSubmission: false,
+      showAlert: false,
+      alertVariant: 'bg-blue-500',
+      alertMsg: 'Please wait! Updating the song.',
     };
   },
   methods: {
     toggleForm() {
       this.showForm = !this.showForm;
     },
-    edit(values) {
+    async edit(values) {
       console.log(values);
+      this.inSubmission = true;
+      this.showAlert = true;
+      this.alertVariant = 'bg-blue-500';
+      this.alertMsg = 'Please wait! Updating the song...';
+
+      const updatedValues = {
+        modifiedName: values.title,
+        genre: values.genre,
+      };
+
+      try {
+        await songsCollection.doc(this.song.id).update({
+          ...updatedValues,
+        });
+      } catch (error) {
+        this.alertVariant = 'bg-red-600';
+        this.alertMsg = 'Failed! Could not update the song!';
+        console.log(error);
+        return;
+      }
+
+      this.updateSong(this.index, {
+        ...updatedValues,
+      });
+
+      this.inSubmission = false;
+      this.alertVariant = 'bg-green-500';
+      this.alertMsg = 'Succes! Song updated!';
     },
   },
 };

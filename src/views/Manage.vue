@@ -13,7 +13,13 @@
           </div>
           <div class="p-6">
             <!-- Composition Items -->
-            <composition-item v-for="song in songs" :key="song.id" :song="song" />
+            <composition-item
+              v-for="(song, idx) in songs"
+              :key="song.id"
+              :song="song"
+              :updateSong="updateSong"
+              :index="idx"
+            />
           </div>
         </div>
       </div>
@@ -47,6 +53,12 @@ export default {
 
       this.songs.push(song);
     });
+  },
+  methods: {
+    updateSong(index, values) {
+      this.songs[index].modifiedName = values.modifiedName;
+      this.songs[index].genre = values.genre;
+    },
   },
 };
 </script>
