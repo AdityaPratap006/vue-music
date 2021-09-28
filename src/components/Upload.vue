@@ -61,6 +61,12 @@ import { firebaseStorage, firebaseAuth, songsCollection } from '../includes/fire
 
 export default {
   name: 'Upload',
+  props: {
+    addSong: {
+      type: Function,
+      required: true,
+    },
+  },
   data() {
     return {
       isDragover: false,
@@ -119,7 +125,9 @@ export default {
             song.url = await uploadTask.snapshot.ref.getDownloadURL();
 
             try {
-              await songsCollection.add(song);
+              const songDocRef = await songsCollection.add(song);
+              const songDoc = await songDocRef.get();
+              this.addSong(songDoc);
             } catch (error) {
               this.uploads[uploadIndex].variant = 'bg-red-400';
               this.uploads[uploadIndex].icon = 'fas fa-times';

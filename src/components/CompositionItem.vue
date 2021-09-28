@@ -44,6 +44,7 @@
               rounded
             "
             placeholder="Enter Song Title"
+            @input="updateUnsavedFlag(true)"
           />
           <vee-error-message class="text-red-600 text-xs" name="title" />
         </div>
@@ -65,6 +66,7 @@
               rounded
             "
             placeholder="Enter Genre"
+            @input="updateUnsavedFlag(true)"
           />
           <vee-error-message class="text-red-600 text-xs" name="genre" />
         </div>
@@ -112,6 +114,9 @@ export default {
       type: Function,
       required: true,
     },
+    updateUnsavedFlag: {
+      type: Function,
+    },
   },
   data() {
     return {
@@ -132,6 +137,7 @@ export default {
     },
     async edit(values) {
       console.log(values);
+
       this.inSubmission = true;
       this.showAlert = true;
       this.alertVariant = 'bg-blue-500';
@@ -156,6 +162,7 @@ export default {
       this.updateSong(this.index, {
         ...updatedValues,
       });
+      this.updateUnsavedFlag(false);
 
       this.inSubmission = false;
       this.alertVariant = 'bg-green-500';
